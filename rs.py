@@ -47,34 +47,54 @@ class RecipeShopCLI(cmd.Cmd):
         register(*parse(arg))
 
     def do_search(self, arg):
-        "Search for recipes: \n\"search [keywords] [min Time] [max Time] [meal type]\n\"search [keywords] [min Time] [max Time]\n\"search [keywords] [meal type]\n\"search [keywords]\n"
+        "Search for recipes: \n\"search [keywords] [min Time] [max Time] [meal type]\"\n\"search [keywords] [min Time] [max Time]\"\n\"search [keywords] [meal type]\"\n\"search [keywords]\"\n"
         search(*parse(arg))
+    
+    def do_recipe(self, arg):
+        "View more details about a recipe: \"recipe [recipe #]\"\nMust use search command first to get recipe #"
+        recipe(arg)
 
-# RecipeShopCLI
+    def do_last(self, arg):
+        "View the results from the last search command: \"last\""
+        printRecipeList()
+
+
+# RecipeShopCLI class
 #=============================================================================================
+
 
 #Global Variables
 ip = "localhost"
 port = 80
 username = ""
-recipes = None
+recipes = []
 
 
 #Functions
 def parse(args):
     return tuple(map(str, args.split()))
 
-def connect(serverIP, serverPort):
+def connect(*args):
+    if(len(args) == 2):
+        connect2(args[0], args[1])
+    elif(len(args) == 1):
+        connect1(args[0])
+    else:
+        print("Invalid number of arguments.")
+
+def connect2(serverIP, serverPort):
     global ip
     ip = serverIP
     global port
     port = serverPort
+    checkConnect()
 
-def connect(serverIP):
+def connect1(serverIP):
     global ip
     ip = serverIP
     global port
     port = 80
+    checkConnect()
 
 def checkConnect():
     print("ip: ", ip)
@@ -154,37 +174,130 @@ def register(user, password, confirm):
         print("Already logged in as", username)
         print("Please logout before registering a new user.")
 
-def search(keywords, minTime, maxTime, mealType):
+def search(*args):
+    if(len(args) == 4):
+        search4(args[0], args[1], args[2], args[3])
+    elif(len(args) == 3):
+        search3(args[0], args[1], args[2])
+    elif(len(args) == 2):
+        search2(args[0], args[1])
+    elif(len(args) == 1):
+        search1(args[0])
+    else:
+        print("Invalid number of arguments.")
+
+def search4(keywords, minTime, maxTime, mealType):
     if(keywords != ""):
-        if(True): #minTime < maxTime
+        if(minTime < maxTime):
             url = ip + ":" + str(port)
             params = "/api/recipe/search?keyword=" + keywords + "&mealType=" + mealType + "&time=" + minTime + "-" + maxTime
+            print(params)
             conn = http.client.HTTPConnection(url)
             conn.request("GET", params)
             res = conn.getresponse()
             print(res.status, res.reason)
             data = res.read()
             if(res.status == 200):
-                print(data[:250], "...")
-                displayRecipeList(json.loads(data))
+                #print(data[:250], "...")
+                getRecipeList(json.loads(data))
             else:
                 print(data)
         else:
-            search(keywords, mealType)
+            search2(keywords, mealType)
     else:
         print("Please enter keywords and try again.")
 
-def displayRecipeList(data):
+def search3(keywords, minTime, maxTime):
+    if(keywords != ""):
+        if(minTime < maxTime):
+            url = ip + ":" + str(port)
+            params = "/api/recipe/search?keyword=" + keywords + "&time=" + minTime + "-" + maxTime
+            print(params)
+            conn = http.client.HTTPConnection(url)
+            conn.request("GET", params)
+            res = conn.getresponse()
+            print(res.status, res.reason)
+            data = res.read()
+            if(res.status == 200):
+                #print(data[:250], "...")
+                getRecipeList(json.loads(data))
+            else:
+                print(data)
+        else:
+            search1(keywords)
+    else:
+        print("Please enter keywords and try again.")
+
+def search2(keywords, mealType):
+    if(keywords != ""):
+        url = ip + ":" + str(port)
+        params = "/api/recipe/search?keyword=" + keywords + "&mealType=" + mealType
+        print(params)
+        conn = http.client.HTTPConnection(url)
+        conn.request("GET", params)
+        res = conn.getresponse()
+        print(res.status, res.reason)
+        data = res.read()
+        if(res.status == 200):
+            #print(data[:250], "...")
+            getRecipeList(json.loads(data))
+        else:
+            print(data)
+    else:
+        print("Please enter keywords and try again.")
+
+def search1(keywords):
+    if(keywords != ""):
+        url = ip + ":" + str(port)
+        params = "/api/recipe/search?keyword=" + keywords
+        print(params)
+        conn = http.client.HTTPConnection(url)
+        conn.request("GET", params)
+        res = conn.getresponse()
+        print(res.status, res.reason)
+        data = res.read()
+        if(res.status == 200):
+            #print(data[:250], "...")
+            getRecipeList(json.loads(data))
+        else:
+            print(data)
+    else:
+        print("Please enter keywords and try again.")
+
+def getRecipeList(data):
     fro = data["from"]
     to = data["to"]
     if(fro <= to):
+        global recipes
         recipes = []
         for i in range(to - fro + 1):
             recipes.append(data["hits"][i])
-            print(i)
-        #print(str(recipes[0])[:250])
+        printRecipeList()
     else:
         print("No recipes found.")
+
+def printRecipeList():
+    if(len(recipes) > 0):
+        iMax = len(str(len(recipes)))
+        for i in range(iMax):
+            print(" ", end="")
+        print("# | Recipe Name")
+        print("=========================================================")
+        index = 0
+        for recipe in recipes:
+            iNum = str(index)
+            for i in range(iMax + 1 - len(iNum)):
+                print(" ", end="")
+            print(index, " | ", recipe["recipe"]["label"], sep="")
+            index += 1
+    else:
+        print("No recipes found. Please use search first.")
+
+def recipe(arg):
+    index = int(arg)
+    if(index >= 0 and index < len(recipes)):
+        print("\n", recipes[index]["recipe"]["label"], sep="")
+
 
     
 
