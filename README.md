@@ -11,15 +11,15 @@ CLI front end for Recipe-Shop
 7. Use "help" command to view all CLI commands
 
 # Info
-Recipe-Shop-CLI made by Troy Thomas/
-GitHub username: TroyT21/
-email thomast9@myumanitoba.ca/
+Recipe-Shop-CLI made by Troy Thomas\
+GitHub username: TroyT21\
+email thomast9@myumanitoba.ca
 
-Recipe-Shop server and web client/
+Recipe-Shop server and web client\
 https://github.com/njzfjiang/Recipe-Shop
 
-Recipe-Shop-App-Version/
+Recipe-Shop-App-Version\
 https://github.com/njzfjiang/Recipe-Shop-App-Version
 
-Uses ASCII Magic to convert images to ASCII art/
+Uses ASCII Magic to convert images to ASCII art\
 https://pypi.org/project/ascii-magic/
