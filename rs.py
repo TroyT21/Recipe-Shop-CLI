@@ -92,7 +92,7 @@ class RecipeShopCLI(cmd.Cmd):
 
 
 #Global Variables
-ip = "localhost"
+ip = "recipeshop.ca"
 port = 80
 username = ""
 recipes = []
@@ -349,7 +349,7 @@ def recipe(arg):
             image = AsciiArt.from_url(recipes[index]["recipe"]["image"])
             image.to_terminal(min(os.get_terminal_size().columns,os.get_terminal_size().lines*2))
 
-            #image.to_html_file('image.html', columns=200)
+            image.to_html_file('image.html', columns=200)
             #filePath = "file:///Recipe-Shop-CLI/image.html"
             #print("\n", "Better Image (opens in browser):\n", filePath, sep="")
         except OSError as e:
