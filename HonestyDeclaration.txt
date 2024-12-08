@@ -1,0 +1,39 @@
+UNIVERSITY OF MANITOBA
+Faculty of Science
+Department of Computer Science
+
+Honesty Declaration for Individual Work
+
+I, the undersigned, declare that the attached assignment is wholly the 
+product of my own work, and that no part of it has been:
+  - copied by manual or electronic means from any work produced by any 
+    other person(s), present or past, including tutors or tutoring services,
+  - based on laboratory work that I did not complete due to unexcused 
+    absence(s),
+  - produced by several students working together as a team (this includes 
+    one person who provides any portion of an assignment to another student
+    or students),
+  - copied from any other source including textbooks and web sites, or
+  - modified to contain falsified data, except as directly authorized by 
+    the Instructor.
+
+I understand that penalties for submitting work which is not wholly my own, 
+or distributing my work to other students is considered an act of Academic 
+Dishonesty and is subject to penalty as described by the University of 
+Manitoba's Student Discipline Bylaw*.
+
+Please PRINT all information: 
+
+Course                : COMP4350
+Section               : A01
+Last Name, First Name : Thomas, Troy
+Student Number        : 7768464
+UM Email              : thomast9@myumanitoba.ca
+Date                  : 2024-12-08
+
+(*) Penalties that may apply, as provided for under the University of 
+Manitoba's Student Discipline By-Law, range from a grade of zero for the 
+assignment, failure in the course to expulsion from the University. The 
+Student Discipline By-Law may be accessed at:
+
+http://umanitoba.ca/admin/governance/governing_documents/students/868.htm

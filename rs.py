@@ -66,7 +66,15 @@ class RecipeShopCLI(cmd.Cmd):
             print("Command failed.\nRun \"help [command]\" to check how to run it.")
 
     def do_search(self, arg):
-        "Search for recipes: \n\"search [keywords] [min Time] [max Time] [meal type]\"\n\"search [keywords] [min Time] [max Time]\"\n\"search [keywords] [meal type]\"\n\"search [keywords]\"\nSeparate multiple keywords with \"/\""
+        """Search for recipes (4 search options):
+    1. \"search [keywords]\"
+    2. \"search [keywords] [mealType]\" 
+    3. \"search [keywords] [minTime] [maxTime]\"
+    4. \"search [keywords] [minTime] [maxTime] [mealType]\"
+        
+[mealType] can be \"Breakfast\", \"Dinner\", \"Lunch\", \"Snack\", or \"Teatime\"
+[minTime] and [maxTime] are whole number integers in minutes for cooking time
+[keywords] is a string of text, separate multiple keywords with a "/" (no spaces between keywords)\n"""
         try:
             search(*parse(arg))
         except:
@@ -233,35 +241,66 @@ def search(*args):
         print("Invalid number of arguments.\nRun \"help [command]\" to check how to run it.")
 
 def search4(keywords, minTime, maxTime, mealType):
-    if(keywords != ""):
-        if(minTime < maxTime):
-            try:
-                url = ip + ":" + str(port)
-                params = "/api/recipe/search?keyword=" + str(keywords).replace("/","+") + "&mealType=" + mealType + "&time=" + minTime + "-" + maxTime
-                #print(params)
-                conn = http.client.HTTPConnection(url)
-                conn.request("GET", params)
-                res = conn.getresponse()
-                print(res.status, res.reason)
-                data = res.read()
-                if(res.status == 200):
-                    #print(data[:250], "...")
-                    getRecipeList(json.loads(data))
-                else:
-                    print(data)
-            except:
-                print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
+    try:
+        if(keywords != ""):
+            if(minTime < maxTime & type(minTime) == int & type(maxTime) == int):
+                try:
+                    url = ip + ":" + str(port)
+                    params = "/api/recipe/search?keyword=" + str(keywords).replace("/","+") + "&mealType=" + mealType + "&time=" + minTime + "-" + maxTime
+                    #print(params)
+                    conn = http.client.HTTPConnection(url)
+                    conn.request("GET", params)
+                    res = conn.getresponse()
+                    print(res.status, res.reason)
+                    data = res.read()
+                    if(res.status == 200):
+                        #print(data[:250], "...")
+                        getRecipeList(json.loads(data))
+                    else:
+                        print(data)
+                except:
+                    print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
+            else:
+                search2(keywords, mealType)
         else:
-            search2(keywords, mealType)
-    else:
-        print("Please enter keywords and try again.")
+            print("Please enter keywords and try again.")
+    except:
+        print("Invalid arguments.\nRun \"help [command]\" to check how to run it.")
+
 
 def search3(keywords, minTime, maxTime):
-    if(keywords != ""):
-        if(minTime < maxTime):
+    try:
+        if(keywords != ""):
+            if(minTime < maxTime & type(minTime) == int & type(maxTime) == int):
+                try:
+                    url = ip + ":" + str(port)
+                    params = "/api/recipe/search?keyword=" + keywords + "&time=" + minTime + "-" + maxTime
+                    #print(params)
+                    conn = http.client.HTTPConnection(url)
+                    conn.request("GET", params)
+                    res = conn.getresponse()
+                    print(res.status, res.reason)
+                    data = res.read()
+                    if(res.status == 200):
+                        #print(data[:250], "...")
+                        getRecipeList(json.loads(data))
+                    else:
+                        print(data)
+                except:
+                    print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
+            else:
+                search1(keywords)
+        else:
+            print("Please enter keywords and try again.")
+    except:
+        print("Invalid arguments.\nRun \"help [command]\" to check how to run it.")
+
+def search2(keywords, mealType):
+    try:
+        if(keywords != ""):
             try:
                 url = ip + ":" + str(port)
-                params = "/api/recipe/search?keyword=" + keywords + "&time=" + minTime + "-" + maxTime
+                params = "/api/recipe/search?keyword=" + keywords + "&mealType=" + mealType
                 #print(params)
                 conn = http.client.HTTPConnection(url)
                 conn.request("GET", params)
@@ -276,51 +315,33 @@ def search3(keywords, minTime, maxTime):
             except:
                 print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
         else:
-            search1(keywords)
-    else:
-        print("Please enter keywords and try again.")
-
-def search2(keywords, mealType):
-    if(keywords != ""):
-        try:
-            url = ip + ":" + str(port)
-            params = "/api/recipe/search?keyword=" + keywords + "&mealType=" + mealType
-            #print(params)
-            conn = http.client.HTTPConnection(url)
-            conn.request("GET", params)
-            res = conn.getresponse()
-            print(res.status, res.reason)
-            data = res.read()
-            if(res.status == 200):
-                #print(data[:250], "...")
-                getRecipeList(json.loads(data))
-            else:
-                print(data)
-        except:
-            print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
-    else:
-        print("Please enter keywords and try again.")
+            print("Please enter keywords and try again.")
+    except:
+        print("Invalid arguments.\nRun \"help [command]\" to check how to run it.")
 
 def search1(keywords):
-    if(keywords != ""):
-        try:
-            url = ip + ":" + str(port)
-            params = "/api/recipe/search?keyword=" + keywords
-            #print(params)
-            conn = http.client.HTTPConnection(url)
-            conn.request("GET", params)
-            res = conn.getresponse()
-            print(res.status, res.reason)
-            data = res.read()
-            if(res.status == 200):
-                #print(data[:250], "...")
-                getRecipeList(json.loads(data))
-            else:
-                print(data)
-        except:
-            print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
-    else:
-        print("Please enter keywords and try again.")
+    try:
+        if(keywords != ""):
+            try:
+                url = ip + ":" + str(port)
+                params = "/api/recipe/search?keyword=" + keywords
+                #print(params)
+                conn = http.client.HTTPConnection(url)
+                conn.request("GET", params)
+                res = conn.getresponse()
+                print(res.status, res.reason)
+                data = res.read()
+                if(res.status == 200):
+                    #print(data[:250], "...")
+                    getRecipeList(json.loads(data))
+                else:
+                    print(data)
+            except:
+                print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
+        else:
+            print("Please enter keywords and try again.")
+    except:
+        print("Invalid arguments.\nRun \"help [command]\" to check how to run it.")
 
 def getRecipeList(data):
     fro = data["from"]
