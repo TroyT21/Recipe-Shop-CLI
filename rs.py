@@ -133,11 +133,22 @@ def login(user, password):
     if(username == ""):
         try:
             url = ip + ":" + str(port)
-            params = "/api/login?username=" + user + "&password=" + password
+            params = "/api/login"
+            body = json.dumps({
+                "username": user,
+                "password": password
+            })
+            #print(body)
+            headers = {
+                "Content-Type": "application/json",
+                "Content-Length": len(body)
+            }
+            #print(headers)
             conn = http.client.HTTPConnection(url)
-            conn.request("GET", params)
+            conn.request("POST", params, body, headers)
             res = conn.getresponse()
             print(res.status, res.reason)
+
             data = json.loads(res.read().decode("utf-8"))
             if(res.status == 200):
                 print(data["message"])
@@ -197,6 +208,7 @@ def register(user, password, confirm):
             conn.request("POST", params, body, headers)
             res = conn.getresponse()
             print(res.status, res.reason)
+
             data = json.loads(res.read().decode("utf-8"))
             if(res.status == 201):
                 print(data["message"])
