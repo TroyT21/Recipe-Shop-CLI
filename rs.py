@@ -243,7 +243,7 @@ def search(*args):
 def search4(keywords, minTime, maxTime, mealType):
     try:
         if(keywords != ""):
-            if(minTime < maxTime & type(minTime) == int & type(maxTime) == int):
+            if(int(minTime) < int(maxTime)):
                 try:
                     url = ip + ":" + str(port)
                     params = "/api/recipe/search?keyword=" + str(keywords).replace("/","+") + "&mealType=" + mealType + "&time=" + minTime + "-" + maxTime
@@ -271,7 +271,7 @@ def search4(keywords, minTime, maxTime, mealType):
 def search3(keywords, minTime, maxTime):
     try:
         if(keywords != ""):
-            if(minTime < maxTime & type(minTime) == int & type(maxTime) == int):
+            if(int(minTime) < int(maxTime)):
                 try:
                     url = ip + ":" + str(port)
                     params = "/api/recipe/search?keyword=" + keywords + "&time=" + minTime + "-" + maxTime
