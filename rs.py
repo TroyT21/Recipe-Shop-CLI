@@ -150,12 +150,11 @@ def login(user, password):
             print(res.status, res.reason)
 
             data = json.loads(res.read().decode("utf-8"))
-
             if(res.status == 200):
-                print("Success: " + data["message"])
+                print(data["message"])
                 username = user
             else:
-                print("Error: " + data["error"])
+                print(data["error"])
         except:
             print("Failed to connect.\nRun \"check\" command to see ip\nRun \"connect\" command to change ip")
     else:
